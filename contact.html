@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — PakZameen</title>
+<style>
+  body { font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.7; color: #1f2937; max-width: 800px; margin: 0 auto; padding: 24px 20px 60px; background: #f8fafc; }
+  .card { background: #fff; border-radius: 12px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  h1 { color: #0d5c46; margin-top: 0; }
+  h2 { color: #0d5c46; margin-top: 28px; font-size: 1.15rem; }
+  a { color: #0d5c46; }
+  .updated { color: #6b7280; font-size: .9rem; }
+  label { display: block; font-weight: 600; margin: 14px 0 4px; }
+  input, select, textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font: inherit; }
+  textarea { min-height: 130px; resize: vertical; }
+  button { margin-top: 18px; background: #0d5c46; color: #fff; border: 0; border-radius: 8px; padding: 12px 26px; font: inherit; font-weight: 700; cursor: pointer; }
+  button:hover { background: #0a4a39; }
+  .alt { background: #f0fdf6; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 18px; margin-top: 26px; font-size: .95rem; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Contact Us</h1>
+  <p class="updated">We usually reply within 1–2 business days.</p>
+  <p>Questions about PakZameen, agency registration, paid postings, or advertising on the portal? Send us a message — the form opens your email app with everything addressed to us.</p>
+
+  <form id="contactForm">
+    <label for="name">Your name</label>
+    <input id="name" name="name" type="text" required autocomplete="name">
+
+    <label for="email">Your email</label>
+    <input id="email" name="email" type="email" required autocomplete="email">
+
+    <label for="topic">Topic</label>
+    <select id="topic" name="topic">
+      <option>General question</option>
+      <option>Agency registration</option>
+      <option>Paid postings &amp; advertising</option>
+      <option>Property enquiry</option>
+      <option>Privacy or data request</option>
+      <option>Other</option>
+    </select>
+
+    <label for="message">Message</label>
+    <textarea id="message" name="message" required></textarea>
+
+    <button type="submit">Send message</button>
+  </form>
+
+  <div class="alt">
+    Prefer email directly? Write to <a href="mailto:nobleinterestinternational@gmail.com">nobleinterestinternational@gmail.com</a>.
+  </div>
+
+  <h2>Other ways to reach us</h2>
+  <p><strong>Property enquiries:</strong> every listing on <a href="/">PakZameen</a> has its own enquiry option that goes straight to the advertiser.
+  <p><strong>Agencies:</strong> use the <a href="/#register">agency registration</a> section on the portal to register and receive your PakZameen reference ID.</p>
+
+  <p style="margin-top:28px"><a href="/">← Back to PakZameen</a></p>
+</div>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = document.getElementById('name').value.trim();
+  var email = document.getElementById('email').value.trim();
+  var topic = document.getElementById('topic').value;
+  var msg = document.getElementById('message').value.trim();
+  var btn = this.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  fetch('https://formsubmit.co/ajax/nobleinterestinternational@gmail.com', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ _subject: '[PakZameen contact] ' + topic + ' — ' + name, _captcha: 'false', _template: 'table', Name: name, Email: email, Topic: topic, Message: msg })
+  }).then(function (r) {
+    if (!r.ok) throw 0;
+    document.getElementById('contactForm').innerHTML = '<p style="font-size:16px"><strong>Message sent ✓</strong><br>Thank you, ' + name.split(' ')[0] + ' — we will reply to ' + email + ' shortly.</p>';
+  }).catch(function () {
+    btn.disabled = false; btn.textContent = 'Send message';
+    window.location.href = 'mailto:nobleinterestinternational@gmail.com?subject=' + encodeURIComponent('[PakZameen contact] ' + topic + ' — ' + name) + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\nTopic: ' + topic + '\n\n' + msg);
+  });
+});
+</script>
+</body>
+</html>
