@@ -1209,7 +1209,12 @@ function renderListings(){
     if(city && p.city !== city) return false;
     if(type && p.type !== type) return false;
     if(beds && p.beds < beds) return false;
-    if(q && (p.title + " " + p.area + " " + p.city + " " + p.agency).toLowerCase().indexOf(q) === -1) return false;
+    if(q){
+      var normS = function(s){ return s.toLowerCase().replace(/([a-z])(\d)/g, "$1 $2").replace(/(\d)([a-z])/g, "$1 $2"); };
+      var hay = normS(p.title + " " + p.area + " " + p.city + " " + p.agency);
+      var toks = normS(q).split(/\s+/);
+      for(var ti = 0; ti < toks.length; ti++){ if(toks[ti] && hay.indexOf(toks[ti]) === -1) return false; }
+    }
     return true;
   });
   var rank = {super:0, hot:1, standard:2};
